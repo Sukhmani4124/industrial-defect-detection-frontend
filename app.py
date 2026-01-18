@@ -1,6 +1,5 @@
 import streamlit as st
 from PIL import Image
-import io
 
 # Page configuration
 st.set_page_config(
@@ -9,321 +8,188 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for professional styling
+# Custom CSS for clearer academic styling
 st.markdown("""
-    <style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: 600;
-        color: #1f2937;
-        margin-bottom: 0.5rem;
-    }
-    .sub-header {
-        font-size: 1.1rem;
-        color: #6b7280;
-        margin-bottom: 2rem;
-    }
-    .section-header {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #374151;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        border-bottom: 2px solid #e5e7eb;
-        padding-bottom: 0.5rem;
-    }
-    .info-box {
-        background-color: #f3f4f6;
-        padding: 1.5rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #3b82f6;
-        margin: 1rem 0;
-    }
-    .placeholder-box {
-        background-color: #fef3c7;
-        padding: 1.5rem;
-        border-radius: 0.5rem;
-        border-left: 4px solid #f59e0b;
-        margin: 1rem 0;
-    }
-    .stButton>button {
-        width: 100%;
-    }
-    </style>
+<style>
+.main-header {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+.sub-header {
+    font-size: 1.15rem;
+    color: #374151;
+    margin-bottom: 2rem;
+}
+.section-header {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 0.4rem;
+}
+.info-box {
+    background-color: #eef2ff;
+    padding: 1.4rem;
+    border-radius: 0.5rem;
+    border-left: 5px solid #2563eb;
+    margin: 1.2rem 0;
+    color: #1f2937;
+}
+.placeholder-box {
+    background-color: #fffbeb;
+    padding: 1.4rem;
+    border-radius: 0.5rem;
+    border-left: 5px solid #d97706;
+    margin: 1.2rem 0;
+    color: #1f2937;
+}
+.stButton>button {
+    width: 100%;
+}
+</style>
 """, unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
-    st.markdown("### System Configuration")
+    st.markdown("## System Configuration")
     st.markdown("---")
-    
-    detection_threshold = st.slider(
+
+    st.slider(
         "Detection Confidence Threshold",
         min_value=0.0,
         max_value=1.0,
         value=0.5,
-        step=0.05,
-        help="Minimum confidence score for object detection"
+        step=0.05
     )
-    
-    tracking_enabled = st.checkbox(
-        "Enable Object Tracking",
-        value=True,
-        help="Track detected objects across video frames"
-    )
-    
-    activity_recognition = st.checkbox(
-        "Enable Activity Recognition",
-        value=True,
-        help="Recognize activities such as walking, running, standing"
-    )
-    
+
+    st.checkbox("Enable Object Tracking", value=True)
+    st.checkbox("Enable Activity Recognition", value=True)
+
     st.markdown("---")
-    st.markdown("### About This System")
+    st.markdown("## About This System")
     st.markdown("""
-    This system demonstrates an intelligent video surveillance framework 
-    capable of detecting moving objects, tracking their trajectories, 
-    and recognizing human activities in real-time.
-    
-    **Key Features:**
-    - Moving object detection
-    - Multi-object tracking
-    - Activity classification
-    - Real-time processing capability
+    This application demonstrates a **classical computer vision–based**
+    intelligent surveillance framework.
+
+    **Core Capabilities:**
+    - Moving object detection  
+    - Multi-object tracking  
+    - Activity recognition  
     """)
 
-# Main content
-st.markdown('<div class="main-header">Intelligent Video Surveillance & Activity Recognition</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">An automated system for detecting, tracking, and recognizing activities in surveillance videos</div>', unsafe_allow_html=True)
+# Main header
+st.markdown(
+    '<div class="main-header">Intelligent Video Surveillance & Activity Recognition</div>',
+    unsafe_allow_html=True
+)
+st.markdown(
+    '<div class="sub-header">Automated detection, tracking, and activity analysis from surveillance videos</div>',
+    unsafe_allow_html=True
+)
 
-# System overview
+# Overview
 st.markdown('<div class="section-header">System Overview</div>', unsafe_allow_html=True)
 st.markdown("""
-This project implements a comprehensive video surveillance system that performs three primary tasks:
+This project implements a **three-stage classical computer vision pipeline**:
 
-1. **Moving Object Detection**: Identifies and localizes moving objects within the surveillance footage
-2. **Object Tracking**: Maintains temporal consistency by tracking detected objects across video frames
-3. **Activity Recognition**: Classifies human activities into categories such as Walking, Running, and Standing
+1. **Moving Object Detection** – Identifies foreground objects in surveillance footage  
+2. **Object Tracking** – Maintains object identities across frames  
+3. **Activity Recognition** – Classifies human motion patterns over time  
 
-The system is designed for real-time processing of surveillance camera feeds and can be deployed 
-in various scenarios including security monitoring, traffic management, and behavioral analysis.
+The system is designed for **offline CCTV surveillance footage** and is suitable
+for security monitoring, behavioral analysis, and academic research.
 """)
 
-# File upload section
+# Input section
 st.markdown('<div class="section-header">Input Data</div>', unsafe_allow_html=True)
-
 tab1, tab2 = st.tabs(["Video Upload", "Image Upload"])
 
 with tab1:
-    st.markdown("Upload surveillance video footage for processing.")
-    
     video_file = st.file_uploader(
-        "Select a video file",
-        type=["mp4", "avi", "mov"],
-        help="Supported formats: MP4, AVI, MOV"
+        "Upload surveillance video",
+        type=["mp4", "avi", "mov"]
     )
-    
-    if video_file is not None:
-        st.markdown("**Preview:**")
+    if video_file:
         st.video(video_file)
-        
-        file_details = {
-            "Filename": video_file.name,
-            "File size": f"{video_file.size / (1024 * 1024):.2f} MB",
-            "File type": video_file.type
-        }
-        
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Filename", file_details["Filename"])
-        with col2:
-            st.metric("Size", file_details["File size"])
-        with col3:
-            st.metric("Type", file_details["File type"])
-        
         st.markdown('<div class="info-box">', unsafe_allow_html=True)
         st.markdown("""
-        **Video loaded successfully.** The system will process this video through the following pipeline:
-        - Frame extraction and preprocessing
-        - Moving object detection in each frame
-        - Trajectory tracking across frames
-        - Activity classification based on motion patterns
+        **Video loaded successfully.**
+
+        Planned processing steps:
+        - Frame extraction and preprocessing  
+        - Foreground motion detection  
+        - Object tracking across frames  
+        - Activity recognition  
         """)
         st.markdown('</div>', unsafe_allow_html=True)
 
 with tab2:
-    st.markdown("Upload a single frame or image for static analysis.")
-    
     image_file = st.file_uploader(
-        "Select an image file",
-        type=["jpg", "jpeg", "png"],
-        help="Supported formats: JPG, JPEG, PNG"
+        "Upload image frame",
+        type=["jpg", "jpeg", "png"]
     )
-    
-    if image_file is not None:
+    if image_file:
         image = Image.open(image_file)
-        
-        col1, col2 = st.columns([2, 1])
-        
-        with col1:
-            st.image(image, caption="Uploaded Image", use_container_width=True)
-        
-        with col2:
-            st.markdown("**Image Properties:**")
-            st.write(f"Dimensions: {image.size[0]} x {image.size[1]} px")
-            st.write(f"Format: {image.format}")
-            st.write(f"Mode: {image.mode}")
-        
-        st.markdown('<div class="info-box">', unsafe_allow_html=True)
-        st.markdown("""
-        **Image loaded successfully.** Static object detection will be performed on this frame.
-        """)
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.image(image, use_container_width=True)
 
-# Processing pipeline section
+# Processing pipeline
 st.markdown('<div class="section-header">Processing Pipeline</div>', unsafe_allow_html=True)
+c1, c2, c3 = st.columns(3)
 
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.markdown("#### Moving Object Detection")
+with c1:
+    st.markdown("### Moving Object Detection")
     st.markdown('<div class="placeholder-box">', unsafe_allow_html=True)
     st.markdown("""
-    **Status:** Awaiting implementation
-    
-    This module will detect moving objects using background subtraction 
-    and foreground segmentation techniques. Detected objects will be 
-    highlighted with bounding boxes.
-    
+    **Status:** Awaiting implementation  
+
+    Detects moving objects using foreground segmentation.
+
     **Planned Methods:**
-    - Gaussian Mixture Models
-    - Frame differencing
-    - Optical flow analysis
+    - Gaussian Mixture Models (background subtraction)  
+    - Frame differencing  
+    - Optical flow for motion analysis  
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
-with col2:
-    st.markdown("#### Object Tracking")
+with c2:
+    st.markdown("### Object Tracking")
     st.markdown('<div class="placeholder-box">', unsafe_allow_html=True)
     st.markdown("""
-    **Status:** Awaiting implementation
-    
-    This module will track detected objects across video frames, 
-    maintaining unique identifiers and trajectory histories.
-    
+    **Status:** Awaiting implementation  
+
+    Tracks detected objects across frames with persistent IDs.
+
     **Planned Methods:**
-    - Kalman filtering
-    - Hungarian algorithm for association
-    - Deep SORT tracking
+    - Kalman filtering  
+    - Hungarian algorithm (data association)  
+    - SORT (Simple Online Realtime Tracking)  
     """)
     st.markdown('</div>', unsafe_allow_html=True)
 
-with col3:
-    st.markdown("#### Activity Recognition")
+with c3:
+    st.markdown("### Activity Recognition")
     st.markdown('<div class="placeholder-box">', unsafe_allow_html=True)
     st.markdown("""
-    **Status:** Awaiting implementation
-    
-    This module will classify activities based on motion patterns 
-    and spatial-temporal features.
-    
+    **Status:** Awaiting implementation  
+
+    Classifies activities using motion and spatio-temporal features.
+
     **Activity Classes:**
-    - Walking
-    - Running
-    - Standing
+    - Walking  
+    - Running  
+    - Standing  
     """)
     st.markdown('</div>', unsafe_allow_html=True)
-
-# Results section
-st.markdown('<div class="section-header">Analysis Results</div>', unsafe_allow_html=True)
-
-if video_file is not None or image_file is not None:
-    results_tab1, results_tab2, results_tab3 = st.tabs([
-        "Detection Results",
-        "Tracking Results",
-        "Activity Classification"
-    ])
-    
-    with results_tab1:
-        st.markdown('<div class="placeholder-box">', unsafe_allow_html=True)
-        st.markdown("""
-        **Detection results will be displayed here.**
-        
-        Expected output:
-        - Annotated frames with bounding boxes
-        - Detection confidence scores
-        - Object count per frame
-        - Detection statistics
-        """)
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    with results_tab2:
-        st.markdown('<div class="placeholder-box">', unsafe_allow_html=True)
-        st.markdown("""
-        **Tracking results will be displayed here.**
-        
-        Expected output:
-        - Object trajectories overlaid on video
-        - Tracking IDs and paths
-        - Velocity and direction vectors
-        - Tracking performance metrics
-        """)
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    with results_tab3:
-        st.markdown('<div class="placeholder-box">', unsafe_allow_html=True)
-        st.markdown("""
-        **Activity recognition results will be displayed here.**
-        
-        Expected output:
-        - Activity labels per tracked object
-        - Confidence scores for each activity
-        - Temporal activity timeline
-        - Activity distribution statistics
-        """)
-        st.markdown('</div>', unsafe_allow_html=True)
-else:
-    st.info("Upload a video or image file to see analysis results.")
-
-# Performance metrics section
-st.markdown('<div class="section-header">System Performance</div>', unsafe_allow_html=True)
-
-metric_col1, metric_col2, metric_col3, metric_col4 = st.columns(4)
-
-with metric_col1:
-    st.metric(
-        label="Processing Speed",
-        value="Pending",
-        help="Frames processed per second"
-    )
-
-with metric_col2:
-    st.metric(
-        label="Detection Accuracy",
-        value="Pending",
-        help="Percentage of correctly detected objects"
-    )
-
-with metric_col3:
-    st.metric(
-        label="Tracking Stability",
-        value="Pending",
-        help="Average tracking duration per object"
-    )
-
-with metric_col4:
-    st.metric(
-        label="Classification Accuracy",
-        value="Pending",
-        help="Activity recognition accuracy"
-    )
 
 # Footer
 st.markdown("---")
-st.markdown("""
-<div style='text-align: center; color: #6b7280; font-size: 0.9rem;'>
-    Intelligent Video Surveillance & Activity Recognition System | Academic Research Project
-</div>
-""", unsafe_allow_html=True)
-
-
+st.markdown(
+    "<div style='text-align:center; color:#374151;'>"
+    "Intelligent Video Surveillance & Activity Recognition | Academic Project"
+    "</div>",
+    unsafe_allow_html=True
+)
