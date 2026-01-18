@@ -9,50 +9,59 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for professional styling
+# Custom CSS for professional styling with improved contrast
 st.markdown("""
     <style>
     .main-header {
         font-size: 2.5rem;
-        font-weight: 600;
-        color: #1f2937;
+        font-weight: 700;
+        color: #f8fafc;
         margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     .sub-header {
         font-size: 1.1rem;
-        color: #4b5563;
+        color: #cbd5e1;
         margin-bottom: 2rem;
+        font-weight: 400;
     }
     .section-header {
         font-size: 1.5rem;
-        font-weight: 600;
-        color: #1f2937;
+        font-weight: 700;
+        color: #e2e8f0;
         margin-top: 2rem;
         margin-bottom: 1rem;
-        border-bottom: 2px solid #d1d5db;
+        border-bottom: 3px solid #3b82f6;
         padding-bottom: 0.5rem;
     }
     .info-box {
-        background-color: #eff6ff;
+        background-color: #1e3a5f;
         padding: 1.5rem;
         border-radius: 0.5rem;
-        border-left: 4px solid #3b82f6;
+        border-left: 4px solid #60a5fa;
         margin: 1rem 0;
-        color: #1f2937;
+        color: #e2e8f0;
     }
     .placeholder-box {
-        background-color: #fef9e7;
+        background-color: #3d2e1f;
         padding: 1.5rem;
         border-radius: 0.5rem;
-        border-left: 4px solid #f59e0b;
+        border-left: 4px solid #fbbf24;
         margin: 1rem 0;
-        color: #1f2937;
+        color: #f3f4f6;
     }
     .stButton>button {
         width: 100%;
     }
     h4 {
-        color: #1f2937;
+        color: #f1f5f9;
+        font-weight: 600;
+    }
+    p {
+        color: #cbd5e1;
+    }
+    .stMarkdown {
+        color: #cbd5e1;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -314,7 +323,7 @@ with metric_col4:
 # Footer
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; color: #4b5563; font-size: 0.9rem;'>
+<div style='text-align: center; color: #94a3b8; font-size: 0.9rem;'>
     Intelligent Video Surveillance & Activity Recognition System | Academic Research Project
 </div>
 """, unsafe_allow_html=True)
